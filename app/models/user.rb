@@ -62,7 +62,10 @@ class User < ActiveRecord::Base
   def send_password_reset_email
     UserMailer.password_reset(self).deliver_now
   end
-  
+  # Returns true if a password reset has expired.
+  def password_reset_expired?
+    reset_sent_at < 2.hours.ago
+  end
   
 private 
 # Converts email to all lower-case.
@@ -76,3 +79,8 @@ private
     self.activation_digest = User.digest(activation_token)
   end
 end
+
+
+
+
+
